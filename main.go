@@ -1,7 +1,6 @@
 package scrappy
 
 import (
-	"fmt"
 	"golang.org/x/net/html"
 	"net/http"
 	"strings"
@@ -129,13 +128,23 @@ func (s *Scrappy) First(node *html.Node, filters ...FilterFunc) *html.Node {
 	return nil
 }
 
-// Next return
-func (s *Scrappy) Next(node *[]html.Node, filters ...FilterFunc) *html.Node {
+// Next return next sibling node that matches with given filters
+func (s *Scrappy) Next(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.NextSibling; node != nil; node = node.NextSibling {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
 	return nil
 }
 
-// All return all the occurrences starting from a given node
-func (s *Scrappy) Prev(node *[]html.Node, filters ...FilterFunc) *html.Node {
+// Prev return next sibling node that matches with given filters
+func (s *Scrappy) Prev(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.PrevSibling; node != nil; node = node.PrevSibling {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
 	return nil
 }
 
