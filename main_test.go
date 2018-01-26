@@ -28,7 +28,7 @@ const (
 	</html>`
 )
 
-func TestGet(t *testing.T) {
+func TestScrappy_Get(t *testing.T) {
 	s := Scrappy{}
 	root, err := s.Get(url)
 	if err != nil {
@@ -37,6 +37,16 @@ func TestGet(t *testing.T) {
 	if root == nil {
 		t.Fatal("Unexpected error root node doesn't exist")
 	}
+}
+
+func TestScrappy_Parse(t *testing.T) {
+	s := Scrappy{}
+	reader := strings.NewReader(document)
+	_, err := s.Parse(reader)
+	if err != nil{
+		t.Fatal("Unexpected error", err)
+	}
+
 }
 
 func TestAll_Depth(t *testing.T) {
