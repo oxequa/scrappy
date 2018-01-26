@@ -1,0 +1,26 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+server:
+  status: false
+  open: false
+  port: 5002
+  host: localhost
+schema:
+- name: scrappy
+  path: .
+  commands:
+    test:
+      status: true
+    fmt:
+      status: true
+  watcher:
+    paths:
+    - /
+    extensions:
+    - go
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor
