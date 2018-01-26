@@ -12,7 +12,7 @@ type Scrappy struct {
 	Contains      bool  // force to return values that contains other values
 	DepthSearch   bool	// enable depth first search
 	BreadthSearch bool  // enable breadth first search
-	NestLevel     int   // search until a defined level
+	NestLevel     int   // search until a nest level
 	Root          *html.Node
 }
 
