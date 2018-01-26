@@ -158,9 +158,3 @@ func (s *Scrappy) Parent(node *[]html.Node, filters ...FilterFunc) *html.Node {
 func (s *Scrappy) Child(node *[]html.Node, filters ...FilterFunc) *[]html.Node {
 	return nil
 }
-
-func (s *Scrappy) Traverse(n *html.Node, f FilterFunc) {
-	for node := n.FirstChild; node != nil; node = node.NextSibling {
-		fmt.Println(n.Data)
-	}
-}
