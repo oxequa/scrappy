@@ -4,14 +4,15 @@ import (
 	"golang.org/x/net/html"
 	"net/http"
 	"strings"
+	"io"
 )
 
 type Scrappy struct {
-	first         bool
-	Contains      bool
-	DepthSearch   bool
-	BreadthSearch bool
-	NestLevel     int
+	first         bool	// force to return first node that match
+	Contains      bool  // force to return values that contains other values
+	DepthSearch   bool	// enable depth first search
+	BreadthSearch bool  // enable breadth first search
+	NestLevel     int   // search until a defined level
 	Root          *html.Node
 }
 
@@ -67,6 +68,88 @@ func Get(url string) (*Scrappy, error) {
 	return &Scrappy{Root: root, DepthSearch: true}, nil
 }
 
+// New can be used with third party reader
+func New(reader io.ReadCloser) (*Scrappy, error){
+	root, err := html.Parse(reader)
+	if err != nil {
+		return nil, err
+	}
+	return &Scrappy{Root: root, DepthSearch: true}, nil
+}
+
+// Next return next sibling node that matches with given filters
+func (s *Scrappy) Next(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.NextSibling; node != nil; node = node.NextSibling {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
+	return nil
+}
+
+// Prev return next sibling node that matches with given filters
+func (s *Scrappy) Prev(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.PrevSibling; node != nil; node = node.PrevSibling {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
+	return nil
+}
+
+// All return all the occurrences starting from a given node
+func (s *Scrappy) Child(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.FirstChild; node != nil; node = node.FirstChild {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
+	return nil
+}
+
+// All return all the occurrences starting from a given node
+func (s *Scrappy) All(node *html.Node, filters ...FilterFunc) []*html.Node {
+	if s.BreadthSearch {
+		return s.Breadth(node, filters...)
+	}
+	return s.Depth(node, filters...)
+}
+
+// First return first occurrence starting from a given node
+func (s *Scrappy) First(node *html.Node, filters ...FilterFunc) *html.Node {
+	var result []*html.Node
+	s.first = true
+	if s.BreadthSearch {
+		result = s.Breadth(node, filters...)
+	}
+	result = s.Depth(node, filters...)
+	s.first = false
+	if len(result) > 0 {
+		return result[0]
+	}
+	return nil
+}
+
+// Parent return parent node that matches with given filters
+func (s *Scrappy) Parent(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.Parent; node != nil; node = node.Parent {
+		if s.Validate(node, filters...) != nil {
+			return node
+		}
+	}
+	return nil
+}
+
+// Validate a note by a list of filters
+func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) *html.Node {
+	for _, f := range filters {
+		if !f(node) {
+			return nil
+		}
+	}
+	return node
+}
+
 // Depth first search algorithm
 func (s *Scrappy) Depth(node *html.Node, filters ...FilterFunc) (result []*html.Node) {
 	if s.first && len(result) == 1 {
@@ -103,67 +186,4 @@ func (s *Scrappy) Breadth(node *html.Node, filters ...FilterFunc) (result []*htm
 		return result
 	}
 	return breadth([]*html.Node{node}, []*html.Node{}, filters...)
-}
-
-// All return all the occurrences starting from a given node
-func (s *Scrappy) All(node *html.Node, filters ...FilterFunc) []*html.Node {
-	if s.BreadthSearch {
-		return s.Breadth(node, filters...)
-	}
-	return s.Depth(node, filters...)
-}
-
-// First return first occurrence starting from a given node
-func (s *Scrappy) First(node *html.Node, filters ...FilterFunc) *html.Node {
-	var result []*html.Node
-	s.first = true
-	if s.BreadthSearch {
-		result = s.Breadth(node, filters...)
-	}
-	result = s.Depth(node, filters...)
-	s.first = false
-	if len(result) > 0 {
-		return result[0]
-	}
-	return nil
-}
-
-// Next return next sibling node that matches with given filters
-func (s *Scrappy) Next(node *html.Node, filters ...FilterFunc) *html.Node {
-	for node := node.NextSibling; node != nil; node = node.NextSibling {
-		if s.Validate(node, filters...) != nil {
-			return node
-		}
-	}
-	return nil
-}
-
-// Prev return next sibling node that matches with given filters
-func (s *Scrappy) Prev(node *html.Node, filters ...FilterFunc) *html.Node {
-	for node := node.PrevSibling; node != nil; node = node.PrevSibling {
-		if s.Validate(node, filters...) != nil {
-			return node
-		}
-	}
-	return nil
-}
-
-// Validate a note by a list of filters
-func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) *html.Node {
-	for _, f := range filters {
-		if !f(node) {
-			return nil
-		}
-	}
-	return node
-}
-
-// All return all the occurrences starting from a given node
-func (s *Scrappy) Parent(node *[]html.Node, filters ...FilterFunc) *html.Node {
-	return nil
-}
-
-// All return all the occurrences starting from a given node
-func (s *Scrappy) Child(node *[]html.Node, filters ...FilterFunc) *[]html.Node {
-	return nil
 }
