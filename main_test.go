@@ -19,9 +19,21 @@ const (
 			<p>
 				<a href="">more</a>
 				<a href="">content</a>
-				<div>i am also a more node</a>
+				<div>
+					i am also a more node
+				</div>
+			</p>
+			<p>
+				<ul>
+					<li>first</li>
+					<li>second</li>
+					<li>third</li>
+					<li>forth</li>
+				</ul>
+				<p>a</p>
 			</p>
 		</div>
+		<i>something<i/>
 		<p>more <a href="scrappy">content</a></p>
 		<p><a href="">content</a> more onload</p>
 	</body>
@@ -50,7 +62,7 @@ func TestScrappy_Parse(t *testing.T) {
 }
 
 func TestAll_Depth(t *testing.T) {
-	s := Scrappy{}
+	s := New()
 	doc, err := html.Parse(strings.NewReader(document))
 	if err != nil {
 		t.Fatal("Unexpected error", err)
@@ -60,65 +72,56 @@ func TestAll_Depth(t *testing.T) {
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'more' instead", len(result))
 	}
-	s = Scrappy{}
+
 	result = s.All.Depth(doc, Text("content"))
 	if len(result) != 3 {
 		t.Fatal("Expected 3 nodes 'content' instead", len(result))
 	}
-	s = Scrappy{}
+
 	result = s.All.Depth(doc, Text("href"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'content' instead", len(result))
 	}
 
 	// test with tag
-	s = Scrappy{}
 	result = s.All.Depth(doc, Tag("a"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'a' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Depth(doc, Tag("div"))
 	if len(result) != 2 {
 		t.Fatal("Expected 2 nodes 'div' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Depth(doc, Tag("href"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'href' instead", len(result))
 	}
 
 	// test with attr
-	s = Scrappy{}
 	result = s.All.Depth(doc, Attr("href"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'href' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Depth(doc, Attr("onload"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'onload' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Depth(doc, Attr("div"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'div' instead", len(result))
 	}
 
 	// test with attr value
-	s = Scrappy{}
 	result = s.All.Depth(doc, Value("myFunc()"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'myFunc' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Depth(doc, Value("scrappy"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'scrappy' instead", len(result))
 	}
 
 	// mixing
-	s = Scrappy{}
 	result = s.All.Depth(doc, Attr("onload"), Value("myFunc()"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
@@ -140,7 +143,7 @@ func TestAll_Depth(t *testing.T) {
 }
 
 func TestAll_Breadth(t *testing.T) {
-	s := Scrappy{}
+	s := New()
 	doc, err := html.Parse(strings.NewReader(document))
 	if err != nil {
 		t.Fatal("Unexpected error", err)
@@ -150,64 +153,53 @@ func TestAll_Breadth(t *testing.T) {
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'more' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Text("content"))
 	if len(result) != 3 {
 		t.Fatal("Expected 3 nodes 'content' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Text("href"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'content' instead", len(result))
 	}
 
 	// test with tag
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Tag("a"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'a' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Tag("div"))
 	if len(result) != 2 {
 		t.Fatal("Expected 2 nodes 'div' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Tag("href"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'href' instead", len(result))
 	}
 
 	// test with attr
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Attr("href"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'href' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Attr("onload"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'onload' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Attr("div"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes 'div' instead", len(result))
 	}
 
 	// test with attr value
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Value("myFunc()"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'myFunc' instead", len(result))
 	}
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Value("scrappy"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes 'scrappy' instead", len(result))
 	}
 	// mixing
-	s = Scrappy{}
 	result = s.All.Breadth(doc, Attr("onload"), Value("myFunc()"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
@@ -225,5 +217,25 @@ func TestAll_Breadth(t *testing.T) {
 	s.All.Breadth(doc, Tag("a"), Attr("href"), Value("scrappy"), custom)
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
+	}
+}
+
+func TestAll_Next(t *testing.T) {
+	s := New()
+	doc, err := html.Parse(strings.NewReader(document))
+	if err != nil {
+		t.Fatal("Unexpected error", err)
+	}
+
+	node := s.One.Depth(doc, Tag("li"))
+	result := s.All.Next(node,Tag("li"))
+	if len(result) != 3 {
+		t.Fatal("Expected 3 nodes 'li' instead", len(result))
+	}
+
+	node = s.One.Depth(doc, Tag("p"))
+	result = s.All.Next(node,Tag("p"))
+	if len(result) != 2 {
+		t.Fatal("Expected 2 nodes 'p' instead", len(result))
 	}
 }
