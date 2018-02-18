@@ -54,25 +54,6 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestValidate(t *testing.T) {
-	node := &html.Node{Parent:nil,Type:html.ErrorNode}
-	if Validate(node){
-		t.Fatal("Unexpected, error nodes are invalid",node.Type)
-	}
-	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"something"}
-	if !Validate(node){
-		t.Fatal("Unexpected, text nodes are valid",node.Type)
-	}
-	node = &html.Node{Parent:nil,Type:html.ElementNode,Data:"div"}
-	if !Validate(node,Tag("div")){
-		t.Fatal("Unexpected, div tag is present",node.Data)
-	}
-	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"div"}
-	if Validate(node,Tag("div")){
-		t.Fatal("Unexpected, div tag is present but the type is wrong",node.Data,node.Type)
-	}
-}
-
 func TestScrappy_Get(t *testing.T) {
 	s := New()
 	root, err := s.Get(url)
@@ -102,4 +83,24 @@ func TestScrappy_Parse(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 
+}
+
+func TestScrappy_Validate(t *testing.T) {
+	s := New()
+	node := &html.Node{Parent:nil,Type:html.ErrorNode}
+	if s.Validate(node){
+		t.Fatal("Unexpected, error nodes are invalid",node.Type)
+	}
+	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"something"}
+	if !s.Validate(node){
+		t.Fatal("Unexpected, text nodes are valid",node.Type)
+	}
+	node = &html.Node{Parent:nil,Type:html.ElementNode,Data:"div"}
+	if !s.Validate(node,Tag("div")){
+		t.Fatal("Unexpected, div tag is present",node.Data)
+	}
+	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"div"}
+	if s.Validate(node,Tag("div")){
+		t.Fatal("Unexpected, div tag is present but the type is wrong",node.Data,node.Type)
+	}
 }

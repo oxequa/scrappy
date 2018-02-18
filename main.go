@@ -10,6 +10,8 @@ import (
 type Scrappy struct {
 	*All
 	*First
+	or bool
+	and bool
 	deep int
 }
 
@@ -17,12 +19,12 @@ type Scrappy struct {
 func New() *Scrappy{
 	s := Scrappy{}
 	s.All = &All{&s}
-	s.First = &First{&s}
+	s.First = &First{&s, 0}
 	return &s
 }
 
 // Validate validate a node by a list of filters
-func Validate(node *html.Node, filters ...FilterFunc) bool {
+func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) bool {
 	// check node error
 	if node.Type == html.ErrorNode || len(node.Data) == 0{
 		return false
@@ -39,7 +41,11 @@ func Validate(node *html.Node, filters ...FilterFunc) bool {
 
 // Deep set deep option and return a new isolated scrappy
 func (s *Scrappy) Deep(val int) *Scrappy{
-	return &Scrappy{s.All,s.First,val}
+	sc := &Scrappy{}
+	sc.deep = val
+	sc.All = s.All
+	sc.First = s.First
+	return sc
 }
 
 // Get return the content of a given url
@@ -48,7 +54,7 @@ func (s *Scrappy) Get(url string) (*html.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	root, err := html.Parse(doc.Body)
+	root, err := s.Parse(doc.Body)
 	if err != nil {
 		return nil, err
 	}
