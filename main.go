@@ -10,9 +10,8 @@ import (
 type Scrappy struct {
 	*All
 	*First
-	or bool
-	and bool
-	deep int
+	deep int	// deep limit
+	nested bool  // nested counter
 }
 
 // New return a blank scrappy instance
@@ -23,20 +22,13 @@ func New() *Scrappy{
 	return &s
 }
 
-// Validate validate a node by a list of filters
-func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) bool {
-	// check node error
-	if node.Type == html.ErrorNode || len(node.Data) == 0{
-		return false
-	}
-	// loop filters
-	for _, f := range filters {
-		if f(node) {
-			continue
-		}
-		return false
-	}
-	return true
+// Nest set nested option and return a new isolated scrappy
+func (s *Scrappy) Nest() *Scrappy{
+	sc := &Scrappy{}
+	sc.nested = true
+	sc.All = s.All
+	sc.First = s.First
+	return sc
 }
 
 // Deep set deep option and return a new isolated scrappy
@@ -70,3 +62,18 @@ func (s *Scrappy) Parse(reader io.Reader) (*html.Node, error){
 	return root, nil
 }
 
+// Validate validate a node by a list of filters
+func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) bool {
+	// check node error
+	if node.Type == html.ErrorNode || len(node.Data) == 0{
+		return false
+	}
+	// loop filters
+	for _, f := range filters {
+		if f(node) {
+			continue
+		}
+		return false
+	}
+	return true
+}

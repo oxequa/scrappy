@@ -85,6 +85,32 @@ func TestAll_Depth(t *testing.T) {
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
 	}
+
+	// nested filters enabled
+	s.nested = true
+	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("href"),Text("more"))
+	if len(result) != 1 {
+		t.Fatal("Expected 1 nodes instead", len(result))
+	}
+	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("p"),Text("more"))
+	if len(result) != 0 {
+		t.Fatal("Expected 0 nodes instead", len(result))
+	}
+	result = s.All.Depth(doc, Tag("html"), Attr("onload"), Value("myFunc()"))
+	if len(result) != 0 {
+		t.Fatal("Expected 0 nodes instead", len(result))
+	}
+
+	// nested filters disabled
+	s.nested = false
+	result = s.All.Depth(doc, Tag("html"), Attr("onload"), Value("myFunc()"))
+	if len(result) != 1 {
+		t.Fatal("Expected 1 nodes instead", len(result))
+	}
+	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("href"),Text("more"))
+	if len(result) != 0 {
+		t.Fatal("Expected 0 nodes instead", len(result))
+	}
 }
 
 func TestAll_Breadth(t *testing.T) {
