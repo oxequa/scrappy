@@ -14,13 +14,13 @@ func (a *All) Depth(node *html.Node, filters ...FilterFunc) []*html.Node {
 	var result []*html.Node
 	validate := filters
 
-	if a.nested && len(filters) >= 1{
+	if a.nested && len(filters) >= 1 {
 		validate = filters[:1]
 	}
 	if a.Validate(node, validate...) {
-		if a.nested && len(filters[1:]) >= 1{
-				filters = filters[1:]
-		}else {
+		if a.nested && len(filters[1:]) >= 1 {
+			filters = filters[1:]
+		} else {
 			result = append(result, node)
 		}
 	}
@@ -39,13 +39,13 @@ func (a *All) Breadth(node *html.Node, filters ...FilterFunc) []*html.Node {
 
 		for _, elm := range nodes {
 			for node := elm.FirstChild; node != nil; node = node.NextSibling {
-				if a.nested && len(filters) >= 1{
+				if a.nested && len(filters) >= 1 {
 					validate = filters[:1]
 				}
 				if a.Validate(node, validate...) {
-					if a.nested && len(filters[1:]) >= 1{
+					if a.nested && len(filters[1:]) >= 1 {
 						filters = filters[1:]
-					}else {
+					} else {
 						result = append(result, node)
 					}
 				}
@@ -76,10 +76,10 @@ func (a *All) Child(node *html.Node, filters ...FilterFunc) []*html.Node {
 	var result []*html.Node
 	for node := node.FirstChild; node != nil; node = node.NextSibling {
 		if a.Validate(node, filters...) {
-			result = append(result,node)
+			result = append(result, node)
 		}
 	}
-return result
+	return result
 }
 
 // Next return next sibling nodes that matches with given filters

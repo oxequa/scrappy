@@ -1,14 +1,14 @@
 package scrappy
 
 import (
-	"testing"
-	"strings"
-	"reflect"
 	"golang.org/x/net/html"
+	"reflect"
+	"strings"
+	"testing"
 )
 
 const (
-	weburl      = "https://github.com/oxequa"
+	weburl   = "https://github.com/oxequa"
 	document = `<!DOCTYPE html>
 	<html onload="myFunc()">
 	<head>
@@ -50,8 +50,8 @@ const (
 func TestNew(t *testing.T) {
 	s := New()
 	val := &Scrappy{}
-	if reflect.TypeOf(s) !=  reflect.TypeOf(val){
-		t.Fatal("Unexpected type",reflect.TypeOf(s),"instead",reflect.TypeOf(val))
+	if reflect.TypeOf(s) != reflect.TypeOf(val) {
+		t.Fatal("Unexpected type", reflect.TypeOf(s), "instead", reflect.TypeOf(val))
 	}
 }
 
@@ -69,8 +69,8 @@ func TestScrappy_Get(t *testing.T) {
 func TestScrappy_Nest(t *testing.T) {
 	s := New()
 	cp := s.Nest()
-	if !cp.nested || s.nested{
-		t.Fatal("Unexpected error",cp.nested,"should be true",s.nested,"should be false")
+	if !cp.nested || s.nested {
+		t.Fatal("Unexpected error", cp.nested, "should be true", s.nested, "should be false")
 	}
 }
 
@@ -78,8 +78,8 @@ func TestScrappy_Deep(t *testing.T) {
 	s := New()
 	i := 5
 	cp := s.Deep(i)
-	if cp.deep != i || s.deep != 0{
-		t.Fatal("Unexpected value",s.deep,"instead",i)
+	if cp.deep != i || s.deep != 0 {
+		t.Fatal("Unexpected value", s.deep, "instead", i)
 	}
 
 }
@@ -87,7 +87,7 @@ func TestScrappy_Deep(t *testing.T) {
 func TestScrappy_Proxy(t *testing.T) {
 	s := New()
 	err := s.Proxy("oxequa.com:8000")
-	if err != nil{
+	if err != nil {
 		t.Fatal(err)
 	}
 }
@@ -96,7 +96,7 @@ func TestScrappy_Parse(t *testing.T) {
 	s := New()
 	reader := strings.NewReader(document)
 	_, err := s.Parse(reader)
-	if err != nil{
+	if err != nil {
 		t.Fatal("Unexpected error", err)
 	}
 
@@ -104,20 +104,20 @@ func TestScrappy_Parse(t *testing.T) {
 
 func TestScrappy_Validate(t *testing.T) {
 	s := New()
-	node := &html.Node{Parent:nil,Type:html.ErrorNode}
-	if s.Validate(node){
-		t.Fatal("Unexpected, error nodes are invalid",node.Type)
+	node := &html.Node{Parent: nil, Type: html.ErrorNode}
+	if s.Validate(node) {
+		t.Fatal("Unexpected, error nodes are invalid", node.Type)
 	}
-	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"something"}
-	if !s.Validate(node){
-		t.Fatal("Unexpected, text nodes are valid",node.Type)
+	node = &html.Node{Parent: nil, Type: html.TextNode, Data: "something"}
+	if !s.Validate(node) {
+		t.Fatal("Unexpected, text nodes are valid", node.Type)
 	}
-	node = &html.Node{Parent:nil,Type:html.ElementNode,Data:"div"}
-	if !s.Validate(node,Tag("div")){
-		t.Fatal("Unexpected, div tag is present",node.Data)
+	node = &html.Node{Parent: nil, Type: html.ElementNode, Data: "div"}
+	if !s.Validate(node, Tag("div")) {
+		t.Fatal("Unexpected, div tag is present", node.Data)
 	}
-	node = &html.Node{Parent:nil,Type:html.TextNode,Data:"div"}
-	if s.Validate(node,Tag("div")){
-		t.Fatal("Unexpected, div tag is present but the type is wrong",node.Data,node.Type)
+	node = &html.Node{Parent: nil, Type: html.TextNode, Data: "div"}
+	if s.Validate(node, Tag("div")) {
+		t.Fatal("Unexpected, div tag is present but the type is wrong", node.Data, node.Type)
 	}
 }

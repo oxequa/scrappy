@@ -2,8 +2,8 @@ package scrappy
 
 import (
 	"golang.org/x/net/html"
-	"net/http"
 	"io"
+	"net/http"
 	"net/url"
 )
 
@@ -11,12 +11,12 @@ import (
 type Scrappy struct {
 	*All
 	*First
-	deep int	// deep limit
-	nested bool  // nested counter
+	deep   int  // deep limit
+	nested bool // nested counter
 }
 
 // New return a blank scrappy instance
-func New() *Scrappy{
+func New() *Scrappy {
 	s := Scrappy{}
 	s.All = &All{&s}
 	s.First = &First{&s, 0}
@@ -24,7 +24,7 @@ func New() *Scrappy{
 }
 
 // Nest set nested option and return a new isolated scrappy
-func (s *Scrappy) Nest() *Scrappy{
+func (s *Scrappy) Nest() *Scrappy {
 	sc := &Scrappy{}
 	sc.nested = true
 	sc.All = s.All
@@ -33,7 +33,7 @@ func (s *Scrappy) Nest() *Scrappy{
 }
 
 // Deep set deep option and return a new isolated scrappy
-func (s *Scrappy) Deep(val int) *Scrappy{
+func (s *Scrappy) Deep(val int) *Scrappy {
 	sc := &Scrappy{}
 	sc.deep = val
 	sc.All = s.All
@@ -42,9 +42,9 @@ func (s *Scrappy) Deep(val int) *Scrappy{
 }
 
 // Proxy set a proxy for all requests
-func (s *Scrappy) Proxy(proxy string) error{
+func (s *Scrappy) Proxy(proxy string) error {
 	p, err := url.Parse(proxy)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(p)}
@@ -65,7 +65,7 @@ func (s *Scrappy) Get(url string) (*html.Node, error) {
 }
 
 // Parse can be used with any reader
-func (s *Scrappy) Parse(reader io.Reader) (*html.Node, error){
+func (s *Scrappy) Parse(reader io.Reader) (*html.Node, error) {
 	root, err := html.Parse(reader)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (s *Scrappy) Parse(reader io.Reader) (*html.Node, error){
 // Validate validate a node by a list of filters
 func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) bool {
 	// check node error
-	if node.Type == html.ErrorNode || len(node.Data) == 0{
+	if node.Type == html.ErrorNode || len(node.Data) == 0 {
 		return false
 	}
 	// loop filters

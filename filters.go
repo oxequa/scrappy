@@ -1,8 +1,8 @@
 package scrappy
 
 import (
-	"strings"
 	"golang.org/x/net/html"
+	"strings"
 )
 
 // FilterFunc is the general definition of a node filter
@@ -22,6 +22,18 @@ func Text(val string) FilterFunc {
 
 // Attr is a filter func that return a node that matches with a given string
 func Attr(val string) FilterFunc {
+	return func(node *html.Node) bool {
+		for _, a := range node.Attr {
+			if a.Key == val {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+// Attr is a filter func that return a node that matches with a given string
+func AttrVal(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
 			if a.Key == val {

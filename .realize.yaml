@@ -1,0 +1,24 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: scrappy
+  path: .
+  tools:
+    fmt:
+      status: true
+    test:
+      status: true
+    install:
+      status: true
+  watcher:
+    exts:
+    - go
+    paths:
+    - /
+    ignore:
+      paths:
+      - .git
+      - .realize
+      - vendor

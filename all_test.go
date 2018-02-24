@@ -1,9 +1,9 @@
 package scrappy
 
 import (
-	"testing"
-	"strings"
 	"golang.org/x/net/html"
+	"strings"
+	"testing"
 )
 
 func TestAll_Child(t *testing.T) {
@@ -13,9 +13,9 @@ func TestAll_Child(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling
-	result := s.All.Child(node,Tag("div"))
+	result := s.All.Child(node, Tag("div"))
 	if len(result) != 3 {
-		t.Fatal("Unexpected error, expected three div node instead",len(result))
+		t.Fatal("Unexpected error, expected three div node instead", len(result))
 	}
 }
 
@@ -101,11 +101,11 @@ func TestAll_Depth(t *testing.T) {
 
 	// nested filters enabled
 	s.nested = true
-	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("href"),Text("more"))
+	result = s.All.Depth(doc, Tag("body"), Tag("div"), Tag("section"), Attr("href"), Text("more"))
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
 	}
-	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("p"),Text("more"))
+	result = s.All.Depth(doc, Tag("body"), Tag("div"), Tag("section"), Attr("p"), Text("more"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes instead", len(result))
 	}
@@ -120,7 +120,7 @@ func TestAll_Depth(t *testing.T) {
 	if len(result) != 1 {
 		t.Fatal("Expected 1 nodes instead", len(result))
 	}
-	result = s.All.Depth(doc, Tag("body"),Tag("div"),Tag("section"),Attr("href"),Text("more"))
+	result = s.All.Depth(doc, Tag("body"), Tag("div"), Tag("section"), Attr("href"), Text("more"))
 	if len(result) != 0 {
 		t.Fatal("Expected 0 nodes instead", len(result))
 	}
@@ -135,16 +135,16 @@ func TestAll_Parent(t *testing.T) {
 	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.NextSibling
 	result := s.All.Parent(node)
 	if len(result) != 3 {
-		t.Fatal("Unexpected error, there are 3 parent instead",len(result))
+		t.Fatal("Unexpected error, there are 3 parent instead", len(result))
 	}
 	node = doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.LastChild
 	result = s.All.Parent(node)
 	if len(result) != 2 {
-		t.Fatal("Unexpected error, there are 2 parent instead",len(result))
+		t.Fatal("Unexpected error, there are 2 parent instead", len(result))
 	}
 	result = s.All.Parent(node, Tag("body"))
 	if len(result) != 1 {
-		t.Fatal("Unexpected error, there is 1 parent body instead",len(result))
+		t.Fatal("Unexpected error, there is 1 parent body instead", len(result))
 	}
 }
 
@@ -233,14 +233,14 @@ func TestAll_NextSibling(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.NextSibling
-	result := s.All.NextSibling(node,Tag("section"))
+	result := s.All.NextSibling(node, Tag("section"))
 	if len(result) != 1 {
-		t.Fatal("Unexpected error, expected only one section node instead",len(result))
+		t.Fatal("Unexpected error, expected only one section node instead", len(result))
 	}
 	node = doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling
-	result = s.All.NextSibling(node,Tag("div"))
+	result = s.All.NextSibling(node, Tag("div"))
 	if len(result) != 2 {
-		t.Fatal("Unexpected error, expected 2 section node instead",len(result))
+		t.Fatal("Unexpected error, expected 2 section node instead", len(result))
 	}
 }
 
@@ -251,13 +251,13 @@ func TestAll_PrevSibling(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling.LastChild.PrevSibling
-	result := s.All.PrevSibling(node,Tag("section"))
+	result := s.All.PrevSibling(node, Tag("section"))
 	if len(result) != 1 {
-		t.Fatal("Unexpected error, expected only one section node instead",len(result))
+		t.Fatal("Unexpected error, expected only one section node instead", len(result))
 	}
 	node = doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.LastChild.PrevSibling
-	result = s.All.PrevSibling(node,Tag("div"))
+	result = s.All.PrevSibling(node, Tag("div"))
 	if len(result) != 2 {
-		t.Fatal("Unexpected error, expected there are 2 div node instead",len(result))
+		t.Fatal("Unexpected error, expected there are 2 div node instead", len(result))
 	}
 }
