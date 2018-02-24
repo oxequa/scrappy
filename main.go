@@ -32,6 +32,15 @@ func (s *Scrappy) Nest() *Scrappy{
 	return sc
 }
 
+// Deep set deep option and return a new isolated scrappy
+func (s *Scrappy) Deep(val int) *Scrappy{
+	sc := &Scrappy{}
+	sc.deep = val
+	sc.All = s.All
+	sc.First = s.First
+	return sc
+}
+
 // Proxy set a proxy for all requests
 func (s *Scrappy) Proxy(proxy string) error{
 	p, err := url.Parse(proxy)
@@ -40,15 +49,6 @@ func (s *Scrappy) Proxy(proxy string) error{
 	}
 	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(p)}
 	return nil
-}
-
-// Deep set deep option and return a new isolated scrappy
-func (s *Scrappy) Deep(val int) *Scrappy{
-	sc := &Scrappy{}
-	sc.deep = val
-	sc.All = s.All
-	sc.First = s.First
-	return sc
 }
 
 // Get return the content of a given url
