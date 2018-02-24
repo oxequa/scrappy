@@ -6,6 +6,19 @@ import (
 	"golang.org/x/net/html"
 )
 
+func TestAll_Child(t *testing.T) {
+	s := New()
+	doc, err := html.Parse(strings.NewReader(document))
+	if err != nil {
+		t.Fatal("Unexpected error", err)
+	}
+	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling
+	result := s.All.Child(node,Tag("div"))
+	if len(result) != 3 {
+		t.Fatal("Unexpected error, expected three div node instead",len(result))
+	}
+}
+
 func TestAll_Depth(t *testing.T) {
 	s := New()
 	doc, err := html.Parse(strings.NewReader(document))
@@ -113,6 +126,28 @@ func TestAll_Depth(t *testing.T) {
 	}
 }
 
+func TestAll_Parent(t *testing.T) {
+	s := New()
+	doc, err := html.Parse(strings.NewReader(document))
+	if err != nil {
+		t.Fatal("Unexpected error", err)
+	}
+	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.NextSibling
+	result := s.All.Parent(node)
+	if len(result) != 3 {
+		t.Fatal("Unexpected error, there are 3 parent instead",len(result))
+	}
+	node = doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.LastChild
+	result = s.All.Parent(node)
+	if len(result) != 2 {
+		t.Fatal("Unexpected error, there are 2 parent instead",len(result))
+	}
+	result = s.All.Parent(node, Tag("body"))
+	if len(result) != 1 {
+		t.Fatal("Unexpected error, there is 1 parent body instead",len(result))
+	}
+}
+
 func TestAll_Breadth(t *testing.T) {
 	s := New()
 	doc, err := html.Parse(strings.NewReader(document))
@@ -191,28 +226,6 @@ func TestAll_Breadth(t *testing.T) {
 	}
 }
 
-func TestAll_Parent(t *testing.T) {
-	s := New()
-	doc, err := html.Parse(strings.NewReader(document))
-	if err != nil {
-		t.Fatal("Unexpected error", err)
-	}
-	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.NextSibling
-	result := s.All.Parent(node)
-	if len(result) != 3 {
-		t.Fatal("Unexpected error, there are 3 parent instead",len(result))
-	}
-	node = doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.LastChild
-	result = s.All.Parent(node)
-	if len(result) != 2 {
-		t.Fatal("Unexpected error, there are 2 parent instead",len(result))
-	}
-	result = s.All.Parent(node, Tag("body"))
-	if len(result) != 1 {
-		t.Fatal("Unexpected error, there is 1 parent body instead",len(result))
-	}
-}
-
 func TestAll_NextSibling(t *testing.T) {
 	s := New()
 	doc, err := html.Parse(strings.NewReader(document))
@@ -246,18 +259,5 @@ func TestAll_PrevSibling(t *testing.T) {
 	result = s.All.PrevSibling(node,Tag("div"))
 	if len(result) != 2 {
 		t.Fatal("Unexpected error, expected there are 2 div node instead",len(result))
-	}
-}
-
-func TestAll_Child(t *testing.T) {
-	s := New()
-	doc, err := html.Parse(strings.NewReader(document))
-	if err != nil {
-		t.Fatal("Unexpected error", err)
-	}
-	node := doc.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling
-	result := s.All.Child(node,Tag("div"))
-	if len(result) != 3 {
-		t.Fatal("Unexpected error, expected three div node instead",len(result))
 	}
 }
