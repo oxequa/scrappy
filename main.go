@@ -4,6 +4,7 @@ import (
 	"golang.org/x/net/html"
 	"net/http"
 	"io"
+	"net/url"
 )
 
 // Scrappy is the cool struct of the lib
@@ -29,6 +30,16 @@ func (s *Scrappy) Nest() *Scrappy{
 	sc.All = s.All
 	sc.First = s.First
 	return sc
+}
+
+// Proxy set a proxy for all requests
+func (s *Scrappy) Proxy(proxy string) error{
+	p, err := url.Parse(proxy)
+	if err != nil{
+		return err
+	}
+	http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(p)}
+	return nil
 }
 
 // Deep set deep option and return a new isolated scrappy

@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	url      = "https://github.com/tockins"
+	weburl      = "https://github.com/oxequa"
 	document = `<!DOCTYPE html>
 	<html onload="myFunc()">
 	<head>
@@ -24,7 +24,7 @@ const (
 					i am also a more node
 				</p>
 			</section>
-			<section>
+			<section class="col xs" style="color:red">
 				<ul>
 					<li>first</li>
 					<li>second</li>
@@ -34,7 +34,8 @@ const (
 				<p>a</p>
 			</section>
 		</div>
-		<div>
+		<div>	èàù
+
 			<i>something</i>
 			<p>more <a href="scrappy">content</a></p>
 			<p><a href="">content</a> more onload</p>
@@ -56,7 +57,7 @@ func TestNew(t *testing.T) {
 
 func TestScrappy_Get(t *testing.T) {
 	s := New()
-	root, err := s.Get(url)
+	root, err := s.Get(weburl)
 	if err != nil {
 		t.Fatal("Unexpected error", err)
 	}
@@ -65,14 +66,30 @@ func TestScrappy_Get(t *testing.T) {
 	}
 }
 
+func TestScrappy_Nest(t *testing.T) {
+	s := New()
+	cp := s.Nest()
+	if !cp.nested || s.nested{
+		t.Fatal("Unexpected error",cp.nested,"should be true",s.nested,"should be false")
+	}
+}
+
 func TestScrappy_Deep(t *testing.T) {
 	s := New()
 	i := 5
-	s = s.Deep(i)
-	if s.deep != i{
+	cp := s.Deep(i)
+	if cp.deep != i || s.deep != 0{
 		t.Fatal("Unexpected value",s.deep,"instead",i)
 	}
 
+}
+
+func TestScrappy_Proxy(t *testing.T) {
+	s := New()
+	err := s.Proxy("oxequa.com:8000")
+	if err != nil{
+		t.Fatal(err)
+	}
 }
 
 func TestScrappy_Parse(t *testing.T) {
