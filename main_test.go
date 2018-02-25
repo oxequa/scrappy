@@ -11,39 +11,37 @@ const (
 	weburl   = "https://github.com/oxequa"
 	document = `<!DOCTYPE html>
 	<html onload="myFunc()">
-	<head>
-		<title>title</title>
-	</head>
-	<body>
-		body text
-		<div>
-			<section>
-				<a href="">more</a>
-				<a href="">content</a>
-				<p>
-					i am also a more node
-				</p>
-			</section>
-			<section class="col xs" style="color:red">
-				<ul>
-					<li>first</li>
-					<li>second</li>
-					<li>third</li>
-					<li>forth</li>
-				</ul>
-				<p>a</p>
-			</section>
-		</div>
-		<div>	èàù
-
-			<i>something</i>
-			<p>more <a href="scrappy">content</a></p>
-			<p><a href="">content</a> more onload</p>
-		</div>
-		<div>
-			<img src="">
-		</div>
-	</body>
+		<head>
+			<title>title</title>
+		</head>
+		<body>
+			body text
+			<div>
+				<section class="col xs" style="color:red">
+					<ul>
+						<li>first</li>
+						<li>second</li>
+						<li>third</li>
+						<li>forth</li>
+					</ul>
+					<p>a</p>
+				</section>
+				<section>
+					<a href="">more</a>
+					<a href="">content</a>
+					<p>i am also a more node</p>
+				</section>
+			</div>
+			<div>
+				abc
+				<i>something</i>
+				<p>more <a href="scrappy">content</a></p>
+				<p><a href="">content</a> more onload</p>
+			</div>
+			<div>
+				<img src="">
+			</div>
+		</body>
 	</html>`
 )
 

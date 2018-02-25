@@ -26,7 +26,7 @@ func TestAll_Depth(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 	// test with content
-	result := s.All.Depth(doc, ContainText("more"))
+	result := s.All.Depth(doc, ContainsText("more"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'more' instead", len(result))
 	}
@@ -155,7 +155,7 @@ func TestAll_Breadth(t *testing.T) {
 		t.Fatal("Unexpected error", err)
 	}
 	// test with content
-	result := s.All.Breadth(doc, ContainText("more"))
+	result := s.All.Breadth(doc, ContainsText("more"))
 	if len(result) != 4 {
 		t.Fatal("Expected 4 nodes 'more' instead", len(result))
 	}

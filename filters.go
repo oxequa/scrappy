@@ -33,7 +33,7 @@ func Attr(val string) FilterFunc {
 }
 
 // Attr is a filter func that return a node that matches with a given string
-func AttrVal(val string) FilterFunc {
+func AttrVal(attr string, val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
 			if a.Key == val {
@@ -57,19 +57,19 @@ func Value(val string) FilterFunc {
 }
 
 // ContainTag is a filter func that return a node with a tag that contain a given string
-func ContainTag(val string) FilterFunc {
+func ContainsTag(val string) FilterFunc {
 	return func(node *html.Node) bool { return node.Type == html.ElementNode && strings.Contains(node.Data, val) }
 }
 
 // ContainText is a filter func that return a node that contain a given string
-func ContainText(val string) FilterFunc {
+func ContainsText(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		return node.Type == html.TextNode && strings.Contains(node.Data, val)
 	}
 }
 
 // ContainAttr is a filter func that return a node with an attr that contain a given string
-func ContainAttr(val string) FilterFunc {
+func ContainsAttr(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
 			if strings.Contains(a.Key, val) {
@@ -81,7 +81,7 @@ func ContainAttr(val string) FilterFunc {
 }
 
 // AttrValues is a filter func that return a node with an attr value that contain a given string
-func ContainValue(val string) FilterFunc {
+func ContainsValue(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
 			if strings.Contains(a.Val, val) {
