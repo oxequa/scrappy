@@ -19,7 +19,7 @@ func TestF_Index(t *testing.T) {
 	}
 	node := doc.FirstChild.FirstChild.NextSibling.FirstChild.FirstChild.NextSibling
 	result := s.F.Index(2).NextSibling(node, Value("xs"))
-	if result.FirstChild.Data != "5"{
+	if result.FirstChild.Data != "5" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 
@@ -97,7 +97,7 @@ func TestF_Breadth(t *testing.T) {
 	// test with another tag
 	result = s.F.Breadth(doc, Tag("p"))
 	if !strings.Contains(result.FirstChild.Data, "more") {
-		t.Fatal("Unexpected error,  wrong node",result.FirstChild.Data)
+		t.Fatal("Unexpected error,  wrong node", result.FirstChild.Data)
 	}
 }
 
@@ -140,15 +140,15 @@ func TestF_FirstSibling(t *testing.T) {
 	}
 	node := doc.FirstChild.FirstChild.NextSibling.FirstChild.FirstChild.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling.NextSibling
 	result := s.F.FirstSibling(node, Value("md"))
-	if result.FirstChild.Data != "2"{
+	if result.FirstChild.Data != "2" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 	result = s.F.FirstSibling(node, Value("lg"))
-	if result != nil{
+	if result != nil {
 		t.Fatal("Unexpected error")
 	}
 	result = s.F.FirstSibling(node, Value("xs"))
-	if result.FirstChild.Data != "1"{
+	if result.FirstChild.Data != "1" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 }
@@ -161,7 +161,7 @@ func TestF_LastSibling(t *testing.T) {
 	}
 	node := doc.FirstChild.FirstChild.NextSibling.FirstChild.FirstChild.NextSibling
 	result := s.F.LastSibling(node, Value("xs"))
-	if result.FirstChild.Data != "7"{
+	if result.FirstChild.Data != "7" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 }
@@ -174,7 +174,7 @@ func TestF_NextSibling(t *testing.T) {
 	}
 	node := doc.FirstChild.FirstChild.NextSibling.FirstChild.FirstChild.NextSibling
 	result := s.F.NextSibling(node, Value("xs"))
-	if result.FirstChild.Data != "3"{
+	if result.FirstChild.Data != "3" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 }
@@ -187,11 +187,11 @@ func TestF_PrevSibling(t *testing.T) {
 	}
 	node := doc.FirstChild.FirstChild.NextSibling.FirstChild.FirstChild.NextSibling
 	result := s.F.NextSibling(node, Value("xs"))
-	if result.FirstChild.Data != "3"{
+	if result.FirstChild.Data != "3" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 	result = s.F.PrevSibling(result, Value("xs"))
-	if result.FirstChild.Data != "1"{
+	if result.FirstChild.Data != "1" {
 		t.Fatal("Unexpected error, wrong node")
 	}
 }

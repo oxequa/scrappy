@@ -10,7 +10,7 @@ type F struct {
 	index int
 }
 
-func decrease(i int) int{
+func decrease(i int) int {
 	if i > 0 {
 		i--
 	}
