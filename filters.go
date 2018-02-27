@@ -8,12 +8,12 @@ import (
 // FilterFunc is the general definition of a node filter
 type FilterFunc func(node *html.Node) bool
 
-// Tag  is a filter func that return a node that matches with a given string
+// Tag  s a filter func that return a node that matches with a given string
 func Tag(val string) FilterFunc {
 	return func(node *html.Node) bool { return node.Type == html.ElementNode && node.Data == val }
 }
 
-// Text  is a filter func that return a node that matches with a given string
+// Text is a filter func that return a node that matches with a given string
 func Text(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		return node.Type == html.TextNode && node.Data == val
@@ -32,11 +32,11 @@ func Attr(val string) FilterFunc {
 	}
 }
 
-// Attr is a filter func that return a node that matches with a given string
-func AttrVal(attr string, val string) FilterFunc {
+// Values is a filter func that return a node that matches with a given string
+func Value(val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
-			if a.Key == val {
+			if a.Val == val {
 				return true
 			}
 		}
@@ -44,11 +44,11 @@ func AttrVal(attr string, val string) FilterFunc {
 	}
 }
 
-// Values is a filter func that return a node that matches with a given string
-func Value(val string) FilterFunc {
+// AttrVal is a filter func that return a node that matches with a pair attr/value
+func AttrVal(attr string, val string) FilterFunc {
 	return func(node *html.Node) bool {
 		for _, a := range node.Attr {
-			if a.Val == val {
+			if a.Key == attr && a.Val == val {
 				return true
 			}
 		}
