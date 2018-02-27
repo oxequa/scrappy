@@ -9,8 +9,8 @@ import (
 
 // Scrappy is the cool struct of the lib
 type Scrappy struct {
-	*All
-	*First
+	*A
+	*F
 	deep   int  // deep limit
 	nested bool // nested counter
 }
@@ -18,8 +18,8 @@ type Scrappy struct {
 // New return a blank scrappy instance
 func New() *Scrappy {
 	s := Scrappy{}
-	s.All = &All{&s}
-	s.First = &First{&s, 0}
+	s.A = &A{&s}
+	s.F = &F{&s, 0}
 	return &s
 }
 
@@ -27,8 +27,8 @@ func New() *Scrappy {
 func (s *Scrappy) Nest() *Scrappy {
 	sc := &Scrappy{}
 	sc.nested = true
-	sc.All = s.All
-	sc.First = s.First
+	sc.A = s.A
+	sc.F = s.F
 	return sc
 }
 
@@ -36,8 +36,8 @@ func (s *Scrappy) Nest() *Scrappy {
 func (s *Scrappy) Deep(val int) *Scrappy {
 	sc := &Scrappy{}
 	sc.deep = val
-	sc.All = s.All
-	sc.First = s.First
+	sc.A = s.A
+	sc.F = s.F
 	return sc
 }
 
@@ -76,7 +76,7 @@ func (s *Scrappy) Parse(reader io.Reader) (*html.Node, error) {
 // Validate validate a node by a list of filters
 func (s *Scrappy) Validate(node *html.Node, filters ...FilterFunc) bool {
 	// check node error
-	if node.Type == html.ErrorNode || len(node.Data) == 0 {
+	if node.Type == html.ErrorNode || len(node.Data) == 0 || len(filters) == 0 {
 		return false
 	}
 	// loop filters

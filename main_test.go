@@ -17,23 +17,30 @@ const (
 		<body>
 			body text
 			<div>
-				<section class="col xs" style="color:red">
+				<section class="col xs" style="color:red" onclick="test()">
 					<ul>
 						<li>first</li>
 						<li>second</li>
 						<li>third</li>
-						<li>forth</li>
+						<li>forth <strong>item</strong></li>
 					</ul>
 					<p>a</p>
 				</section>
-				<section>
+				<section class="xs">
 					<a href="">more</a>
 					<a href="">content</a>
 					<p>i am also a more node</p>
 				</section>
+				<section class="xs" style="color:red">
+					<i>test</i>
+				</section>
+				<section>
+					<i>test</i>
+				</section>
 			</div>
 			<div>
 				abc
+				<strong>breadth</strong>
 				<i>something</i>
 				<p>more <a href="scrappy">content</a></p>
 				<p><a href="">content</a> more onload</p>
@@ -43,6 +50,16 @@ const (
 			</div>
 		</body>
 	</html>`
+	sibling = `<ul>
+		<li class="xs">1</li>
+		<li class="md">2</li>
+		<li class="xs">3</li>
+		<li class="md">4</li>
+		<li class="xs">5</li>
+		<li class="md">6</li>
+		<li class="xs">7</li>
+		<li class="md">8</li>
+	</ul>`
 )
 
 func TestNew(t *testing.T) {
@@ -103,12 +120,12 @@ func TestScrappy_Parse(t *testing.T) {
 func TestScrappy_Validate(t *testing.T) {
 	s := New()
 	node := &html.Node{Parent: nil, Type: html.ErrorNode}
-	if s.Validate(node) {
+	if s.Validate(node, Tag("div")) {
 		t.Fatal("Unexpected, error nodes are invalid", node.Type)
 	}
 	node = &html.Node{Parent: nil, Type: html.TextNode, Data: "something"}
-	if !s.Validate(node) {
-		t.Fatal("Unexpected, text nodes are valid", node.Type)
+	if s.Validate(node) {
+		t.Fatal("Unexpected, there are no filters", node.Type)
 	}
 	node = &html.Node{Parent: nil, Type: html.ElementNode, Data: "div"}
 	if !s.Validate(node, Tag("div")) {
