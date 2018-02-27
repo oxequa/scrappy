@@ -5,40 +5,41 @@ import (
 )
 
 // First, group of methods that return only one occurrence
-type First struct {
+type F struct {
 	*Scrappy
 	index int
 }
 
-func (f *First) Index(index int) *First {
+func decrease(i int) int{
+	if i > 0 {
+		i--
+	}
+	return i
+}
+
+func (f *F) Index(index int) *F {
 	f.index = index
 	return f
 }
 
-// Return first child node that matches
-func (f *First) Child(node *html.Node, filters ...FilterFunc) *html.Node {
-	for node := node.FirstChild; node != nil; node = node.NextSibling {
-		if f.Validate(node, filters...) {
-			return node
-		}
-	}
-	return nil
-}
-
 // Return first parent node that matches
-func (f *First) Parent(root *html.Node, filters ...FilterFunc) *html.Node {
+func (f *F) Parent(root *html.Node, filters ...FilterFunc) *html.Node {
 	for node := root.Parent; node != nil; node = node.Parent {
 		if f.Validate(node, filters...) {
-			return node
+			if f.index = decrease(f.index); f.index == 0 {
+				return node
+			}
 		}
 	}
 	return nil
 }
 
 // Depth return a node using first depth algorithm, scan all nodes
-func (f *First) Depth(node *html.Node, filters ...FilterFunc) *html.Node {
+func (f *F) Depth(node *html.Node, filters ...FilterFunc) *html.Node {
 	if f.Validate(node, filters...) {
-		return node
+		if f.index = decrease(f.index); f.index == 0 {
+			return node
+		}
 	}
 	for node := node.FirstChild; node != nil; node = node.NextSibling {
 		result := f.Depth(node, filters...)
@@ -50,14 +51,16 @@ func (f *First) Depth(node *html.Node, filters ...FilterFunc) *html.Node {
 }
 
 // Breadth return a node using first breadth algorithm, scan all nodes
-func (f *First) Breadth(node *html.Node, filters ...FilterFunc) *html.Node {
+func (f *F) Breadth(node *html.Node, filters ...FilterFunc) *html.Node {
 	var breadth func(nodes []*html.Node, filters ...FilterFunc) *html.Node
 	breadth = func(nodes []*html.Node, filters ...FilterFunc) *html.Node {
 		var next []*html.Node
 		for _, elm := range nodes {
 			for node := elm.FirstChild; node != nil; node = node.NextSibling {
 				if f.Validate(node, filters...) {
-					return node
+					if f.index = decrease(f.index); f.index == 0 {
+						return node
+					}
 				}
 				next = append(next, node)
 			}
@@ -71,54 +74,73 @@ func (f *First) Breadth(node *html.Node, filters ...FilterFunc) *html.Node {
 }
 
 // Return last child, it's like a last sibling with the first child
-func (f *First) LastChild(root *html.Node, filters ...FilterFunc) *html.Node {
+func (f *F) LastChild(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.LastChild; node != nil; node = node.PrevSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
+				return node
+			}
+		}
+	}
+	return nil
+}
+
+// Return first child node that matches
+func (f *F) FirstChild(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.FirstChild; node != nil; node = node.NextSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
+				return node
+			}
+		}
+	}
 	return nil
 }
 
 // LastSibling, return last sibling node that matches
-func (f *First) LastSibling(root *html.Node, filters ...FilterFunc) *html.Node {
-	return nil
+func (f *F) LastSibling(node *html.Node, filters ...FilterFunc) (result *html.Node) {
+	for node := node.NextSibling; node != nil; node = node.NextSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
+				result = node
+			}
+		}
+	}
+	return result
 }
 
-// LastSibling, return initial sibling that matches
-func (f *First) InitSibling(root *html.Node, filters ...FilterFunc) *html.Node {
-	return nil
+// FirstSibling, return first sibling node that matches
+func (f *F) FirstSibling(node *html.Node, filters ...FilterFunc) (result *html.Node) {
+	for node := node.PrevSibling; node != nil; node = node.PrevSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
+				result = node
+			}
+		}
+	}
+	return result
 }
 
 // NextSibling, return next sibling that matches
-func (f *First) NextSibling(root *html.Node, filters ...FilterFunc) *html.Node {
-	for node := root.NextSibling; node != nil; node = node.NextSibling {
-		if len(filters) > 0 && f.Validate(node, filters...) {
-			if node.LastChild != nil && node.PrevSibling.Data != root.Data && node.Parent != root {
+func (f *F) NextSibling(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.NextSibling; node != nil; node = node.NextSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
 				return node
 			}
-		} else {
-			return node
 		}
 	}
 	return nil
 }
 
 // PrevSibling, return prev sibling that matches
-func (f *First) PrevSibling(root *html.Node, filters ...FilterFunc) *html.Node {
-	for node := root.PrevSibling; node != nil; node = node.PrevSibling {
-		if len(filters) > 0 && f.Validate(node, filters...) {
-			if node.LastChild != nil && node.NextSibling.Data != root.Data && node.Parent != root {
+func (f *F) PrevSibling(node *html.Node, filters ...FilterFunc) *html.Node {
+	for node := node.PrevSibling; node != nil; node = node.PrevSibling {
+		if f.Validate(node, filters...) {
+			if f.index = decrease(f.index); f.index == 0 {
 				return node
 			}
-		} else {
-			return node
 		}
 	}
-	return nil
-}
-
-// Return i nd child node that matches
-func (f *First) PositionChild(root *html.Node, i int, filters ...FilterFunc) *html.Node {
-	return nil
-}
-
-// Return i nd sibling node that matches
-func (f *First) PositionSibling(root *html.Node, i int, filters ...FilterFunc) *html.Node {
 	return nil
 }
