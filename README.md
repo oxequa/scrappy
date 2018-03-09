@@ -9,7 +9,7 @@
   <a href="https://gitter.im/oxequa/scrappy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://img.shields.io/gitter/room/oxequa/scrappy.svg?style=flat-square" alt="Gitter"></a>
 </p>
 <hr>
-<h3 align="center">Scrappy is a fast and high-level web scraper</h3>
+<h3 align="center">Fast and high-level web scraper</h3>
 <hr>
 
 ## Quickstart
